@@ -1,6 +1,4 @@
 # Домашнее задание по теме "Оператор "with"
-from operator import index
-from os.path import split
 
 
 class WordsFinder:
@@ -13,9 +11,9 @@ class WordsFinder:
             return self._all_words
         all_words = {}
         del_simbols = [',', '.', '=', '!', '?', ';', ':', ' - ']
-        words = []
-        for i in self.file_names:
-            with open(i, encoding='utf-8') as file:
+        for elem in self.file_names:
+            words = []
+            with open(elem, encoding='utf-8') as file:
                 for line in file:
                     line = line.lower()
                     for k in del_simbols:
@@ -24,9 +22,9 @@ class WordsFinder:
                     line = line.split()
                     if line:
                         words.extend(line)
-                all_words[i] = words
-                print(all_words)
+                all_words[elem] = words
         self._all_words = all_words
+        print(all_words)
         return all_words
 
     def find(self, word):
@@ -34,14 +32,36 @@ class WordsFinder:
         for key, value in self.get_all_words().items():
             for w in value:
                 if word.lower() == w:
-                    find_words[key] = value.index(w)+1
+                    find_words[key] = value.index(w) + 1
                     print(find_words)
                     return find_words
 
+    def count(self, word):
+        count = 0
+        count_dict = {}
+        for key, value in self.get_all_words().items():
+            for w in value:
+                if word.lower() == w:
+                    count += 1
+            count_dict[key] = count
+            count = 0
+        print(count_dict)
+        return count_dict
 
-finder1 = WordsFinder('test_file.txt')
-finder1.get_all_words()
-finder1 = WordsFinder('products.txt')
-finder1.get_all_words()
+
+finder1 = WordsFinder('test_file.txt', 'products.txt')
+dict_ = finder1.get_all_words()
+# print(dict_.keys())
 
 finder1.find("TEXT")
+finder1.count('TExt')
+
+# list_ = 'Potato, 50.0, Vagetables'.split()
+# for i in list_:
+#     if ',' in i:
+#         i = i.replace(',', '')
+#     try:
+#         if float(i):
+#             print(i)
+#     except:
+#         continue
