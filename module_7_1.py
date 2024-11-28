@@ -37,6 +37,8 @@ class Shop:
                 file.write(f"{str(item)}\n")
         file.close()
 
+# file = open('products.txt', 'w')
+# file.close()
 
 s1 = Shop()
 p1 = Product('Potato', 50.0, 'Vagetables')
@@ -45,3 +47,4 @@ p3 = Product('Tomato', 5.5, 'Vegetables')
 print(p2)
 s1.add(p1, p2, p3)
 print(s1.get_products())
+
