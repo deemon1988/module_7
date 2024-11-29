@@ -1,4 +1,5 @@
 # Домашнее задание по теме "Оператор "with"
+from operator import index
 
 
 class WordsFinder:
@@ -24,7 +25,7 @@ class WordsFinder:
                         words.extend(line)
                 all_words[elem] = words
         self._all_words = all_words
-        print(all_words)
+        print(self._all_words)
         return all_words
 
     def find(self, word):
@@ -33,8 +34,8 @@ class WordsFinder:
             for w in value:
                 if word.lower() == w:
                     find_words[key] = value.index(w) + 1
-                    print(find_words)
-                    return find_words
+        print(find_words)
+        return find_words
 
     def count(self, word):
         count = 0
@@ -49,12 +50,10 @@ class WordsFinder:
         return count_dict
 
 
-finder1 = WordsFinder('test_file.txt', 'products.txt')
-dict_ = finder1.get_all_words()
-# print(dict_.keys())
-
-finder1.find("TEXT")
-finder1.count('TExt')
+finder2 = WordsFinder('Walt Whitman - O Captain! My Captain!.txt', 'Rudyard Kipling - If.txt',
+                      'Mother Goose - Monday’s Child.txt')
+finder2.find('the')
+finder2.count('the')
 
 # list_ = 'Potato, 50.0, Vagetables'.split()
 # for i in list_:
