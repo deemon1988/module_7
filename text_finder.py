@@ -1,6 +1,5 @@
 # Домашнее задание по теме "Оператор "with"
 
-
 class WordsFinder:
     def __init__(self, *files_txt):
         self.file_names = files_txt
@@ -10,19 +9,16 @@ class WordsFinder:
         if self._all_words is not None:
             return self._all_words
         all_words = {}
-        del_simbols = [',', '.', '=', '!', '?', ';', ':', ' - ']
+        # del_simbols = [',', '.', '=', '!', '?', ';', ':', ' - ']
         for elem in self.file_names:
-            words = []
+            rows_item = []
             with open(elem, encoding='utf-8') as file:
                 for line in file:
                     line = line.lower()
-                    for k in del_simbols:
-                        if k in line:
-                            line = line.replace(k, '')
-                    line = line.split()
+                    line = line.split(';')
                     if line:
-                        words.extend(line)
-                all_words[elem] = words
+                        rows_item.extend(line)
+                all_words[elem] = rows_item
         self._all_words = all_words
         print(all_words)
         return all_words
@@ -48,21 +44,8 @@ class WordsFinder:
         print(count_dict)
         return count_dict
 
-
-
-# finder2 = WordsFinder('test_text/Mother Goose - Monday’s Child.txt','test_text/Rudyard Kipling - If.txt'
-#                       ,'test_text/Walt Whitman - O Captain! My Captain!.txt')
-# finder2.get_all_words()
-# finder2.find('the')
-# finder2.count('the')
-
-
-# list_ = 'Potato, 50.0, Vagetables'.split()
-# for i in list_:
-#     if ',' in i:
-#         i = i.replace(',', '')
-#     try:
-#         if float(i):
-#             print(i)
-#     except:
-#         continue
+finder1 = WordsFinder('path.txt')
+dict_rows =  finder1.get_all_words()
+values = dict_rows.get('path.txt')
+print('D:\\ffmpeg-2024-11-28-git-bc991ca048-full_build\\bin'.lower() in values)
+print(len(values))
