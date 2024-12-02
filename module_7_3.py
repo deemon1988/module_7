@@ -49,7 +49,13 @@ class WordsFinder:
         return count_dict
 
 
+name = 'about.txt'
+file_text = ''
+with open(name, encoding='utf-8') as file:
+    for line in file:
+        file_text = file_text + ''.join(line)
 
+    print(file_text)
 # finder2 = WordsFinder('test_text/Mother Goose - Monday’s Child.txt','test_text/Rudyard Kipling - If.txt'
 #                       ,'test_text/Walt Whitman - O Captain! My Captain!.txt')
 # finder2.get_all_words()
