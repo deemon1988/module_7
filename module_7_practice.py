@@ -24,45 +24,59 @@ def file_open():
             content = file.read()
         # Создание нового окна для отображения содержимого
         new_window = tkinter.Toplevel(window)
-        new_window.title(f'Просмотр файла - {file_path}')
+        new_window.title(os.path.basename(file_path))
         # Добавление текстового поля для отображения содержимого
         text_widget = tkinter.Text(new_window, wrap='word')
         text_widget.insert('1.0', content)
-        text_widget.config(state="disabled")  # Запрет редактирования
+        # text_widget.config(state="disabled")  # Запрет редактирования
         text_widget.pack(expand=True, fill='both')
+        menu_bar = tkinter.Menu(new_window)
+        file_menu = tkinter.Menu(menu_bar, tearoff=0)
+        def curent_content_save():
+            content = text_widget.get('1.0', tkinter.END)
+            file_save(content)
+
+        file_menu.add_command(label="Сохранить", command=curent_content_save)
+        menu_bar.add_cascade(label='Файл', menu=file_menu)
+
+        new_window.configure(menu=menu_bar)
 
 
-def file_save():
-    file_save = filedialog.asksaveasfilename(title='Сохранить текстовый документ',
+def file_save(content):
+
+    file_path = filedialog.asksaveasfilename(title='Сохранить текстовый документ',
                                              defaultextension='.txt',
                                              filetypes=(("Текстовые файлы", "*.txt"), ("Все файлы", "*.*")))
-    if file_save:
-        with open(file_save, 'w', encoding='utf-8') as file:
-            pass
-        print(file_save)
+    if file_path:
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(content)
+        print(f"Контент успешно сохранен в файл.{file_path}")
+
+    return os.path.basename(file_path)
 
 
 def file_create():
+
     window_file = tkinter.Toplevel(window)
+    window_file.title('Новый текстовый документ')
+
+    text_widget = tkinter.Text(window_file, wrap='word')
+    text_widget.pack(expand=True, fill='both')
+
     menu_bar_file = tkinter.Menu(window_file)
     menu_new_file = tkinter.Menu(menu_bar, tearoff=0)
-    menu_new_file.add_command(label='Сохранить', command=file_save)
+
+    def save_current_content():
+        content = text_widget.get('1.0', tkinter.END)
+        win_title = file_save(content)
+        window_file.title(win_title)
+    menu_new_file.add_command(label='Сохранить', command=save_current_content)
     menu_bar_file.add_cascade(label='Файл', menu=menu_new_file)
+
     window_file.configure(menu=menu_bar_file)
 
-    # file_path = filedialog.asksaveasfilename(title='Сохранить текстовый документ',
-    #                              defaultextension='.txt',
-    #                              filetypes=(("Текстовые файлы", "*.txt"), ("Все файлы", "*.*")))
-    # if file_path:
-    #     with open(file_path, 'w', encoding='utf-8') as file:
-    #        pass
 
-    # with open(file_path, 'r', encoding='utf-8') as r_file:
-    #    content =  r_file.read()
-    content = ''
-    text_widget = tkinter.Text(window_file, wrap='word')
-    text_widget.insert('1.0', content)
-    text_widget.pack(expand=True, fill='both')
+
 
 
 def about():
@@ -72,20 +86,23 @@ def about():
         for line in file:
             content = content + ''.join(line) + '\n'
     window_about = tkinter.Toplevel(window)
+    window_about.title("About")
     window_about.geometry("350x250")
     window_about.resizable(width=False, height=False)
-    text_about = tkinter.Label(window_about, text=content, font=("Arial"))
+    text_about = tkinter.Label(window_about, text=content)
     text_about.grid(row=0, column=0, padx=65, pady=50, sticky='nsew')
 
 
-def help():
+def info():
     name = 'help.txt'
-    file_text = ''
+    content = ''
     with open(name, encoding='utf-8') as file:
         for line in file:
-            file_text = file_text + ''.join(line) + '\n'
-    text_help = tkinter.Label(window, text=file_text)
-    text_help.grid(column=1, row=4)
+            content = content + ''.join(line) + '\n'
+    window_info = tkinter.Tk()
+    window_info.title('Info')
+    text_info = tkinter.Label(window_info, text=content)
+    text_info.grid(column=0, row=0)
 
 
 def exit_app():
@@ -107,18 +124,19 @@ menu_bar = tkinter.Menu(window)
 menu_file = tkinter.Menu(menu_bar, tearoff=0)
 menu_file.add_command(label='Открыть', command=file_open)
 menu_file.add_command(label='Создать', command=file_create)
-menu_file.add_command(label='Сохранить', command=file_save)
+# menu_file.add_command(label='Сохранить', command=file_save)
 menu_file.add_separator()
 menu_file.add_command(label='Выход', command=exit_app)
 
 menu_about = tkinter.Menu(menu_bar, tearoff=0)
 menu_about.add_command(label='О нас', command=about)
 menu_help = tkinter.Menu(menu_bar, tearoff=0)
-menu_help.add_command(label='Справка', command=help)
+menu_help.add_command(label='О программе', command=info)
 
 menu_bar.add_cascade(label="Файл", menu=menu_file)
 menu_bar.add_cascade(label="Инфо", menu=menu_about)
-menu_bar.add_cascade(label='Руководство', menu=menu_help)
+menu_bar.add_cascade(label='Справка', menu=menu_help)
+
 
 window.config(menu=menu_bar)
 window.configure(background='black')
